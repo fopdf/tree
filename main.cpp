@@ -1,29 +1,29 @@
-//Красно-черное дерево(Основные функции для операций над деревом и балансировки)
-//В понимании и работе над проектом мне очень помогло:
+//Red-black tree(Main functions for operations and balancing)
+//In understanding and working on the project helped me a lot:
 //http://www.mkurnosov.net/teaching/uploads/DSA/dsa-fall-lecture4.pdf
 //https://en.wikipedia.org/wiki/Red–black_tree
 //http://algolist.ru/ds/rbtree.php
 //http://www.codenet.ru/np-includes/upload/2004/04/05/127988.txt
 //https://habr.com/ru/post/330644/
 //https://www.ibm.com/developerworks/ru/library/l-data_structures_09/index.html
-
-//Кормен Т.Х., Лейзерсон Ч.И., Ривест Р.Л., Штайн К.
-//Алгоритмы: построение и анализ. – 2-е изд. – М.:
-//Вильямс, 2005. – 1296 с. (С. 336-356)
+//https://www.youtube.com/watch?v=QjsQpgzuO-c&list=PL55ElYIEKI0AIeQxsp7iW3WmUPdu7FTh-&index=29&t=0s    :)
+//Cormen T.H., Leizerson Ch.I., Rivest R.L., Stein K.
+//Algorithms: building and analysis. – 2-nd pub. – M.:
+//Williams, 2005. – 1296 p. (P. 336-356)
 
 
 
 #include <iostream>
 
 using namespace std;
-                                          //typedef - 'псевдоним', используемый для упрощения кода
-enum typecolor { BLACK, RED };   //Вводим тип перечисление для обозначения цвета элемента
+                                          //typedef - 'alias', used to simplify code
+enum typecolor { BLACK, RED };   //Enter the enumeration type to indicate the color of the element
 
 typedef int value;
-#define compLT(a,b) (a < b)              //Введем операции сравнения
+#define compLT(a,b) (a < b)              //Let's introduce comparison operations
 #define compEQ(a,b) (a == b)
 
-typedef struct tree_element {            //Вся информация об элементе
+typedef struct tree_element {            //All the information about the item
   value data;
   struct tree_element* left;
   struct tree_element* right;
@@ -32,10 +32,11 @@ typedef struct tree_element {            //Вся информация об элементе
 } tree_element;
 
 #define NIL & leaf
-tree_element leaf = {0, NIL, NIL, 0, BLACK};   //"Листья" дерева
-tree_element *root = NIL;                      //Корневой элемент
+tree_element leaf = {0, NIL, NIL, 0, BLACK};   //Tree leaves
+tree_element *root = NIL;                      //Root element
 
-tree_element* create_tree_element(value data2) {
+
+tree_element* create_tree_element(value data2) {       //Create element
     tree_element* elem = new tree_element;
     elem ->data = data2;
     elem ->left = NIL;
@@ -45,7 +46,7 @@ tree_element* create_tree_element(value data2) {
     return elem;
 }
 
-void rotateLeft(tree_element *x) {                     //Левый поворот
+void rotateLeft(tree_element *x) {                     //Left turn
     tree_element *y = x->right;
     x->right = y->left;
     if (y->left != NIL) y->left->parent = x;
@@ -62,7 +63,7 @@ void rotateLeft(tree_element *x) {                     //Левый поворот
     if (x != NIL) x->parent = y;
 }
 
-void rotateRight(tree_element *x) {                    //Правый поворот
+void rotateRight(tree_element *x) {                    //Right turn
     tree_element *y = x->left;
     x->left = y->right;
     if (y->right != NIL) y->right->parent = x;
@@ -79,26 +80,26 @@ void rotateRight(tree_element *x) {                    //Правый поворот
     if (x != NIL) x->parent = y;
 }
 
-void insertFix(tree_element *x) {                      //Балансировка вставки элеманта
+void insertFix(tree_element *x) {                      //Balancing of the insertion element
     while (x != root && x->parent->color == RED) {
-        //Если дерево нуждается в балансировке
+        //If the tree needs balancing
         if (x->parent == x->parent->parent->left) {
             tree_element *y = x->parent->parent->right;
             if (y->color == RED) {
-                // Если "дядя" красный
+                // If "uncle" is red:
                 x->parent->color = BLACK;
                 y->color = BLACK;
                 x->parent->parent->color = RED;
                 x = x->parent->parent;
             } else {
 
-                //Если "дядя" черный
+                //If "uncle" is black:
                 if (x == x->parent->right) {
                     x = x->parent;
                     rotateLeft(x);
                 }
 
-                //Смена цвета и поворот
+                //Change color and a turn
                 x->parent->color = BLACK;
                 x->parent->parent->color = RED;
                 rotateRight(x->parent->parent);
@@ -108,14 +109,14 @@ void insertFix(tree_element *x) {                      //Балансировка вставки эл
             tree_element *y = x->parent->parent->left;
             if (y->color == RED) {
 
-                //Если "дядя" красный
+                //If "uncle" is red
                 x->parent->color = BLACK;
                 y->color = BLACK;
                 x->parent->parent->color = RED;
                 x = x->parent->parent;
             } else {
 
-                //Если "дядя" черный
+                //If "uncle" is black
                 if (x == x->parent->left) {
                     x = x->parent;
                     rotateRight(x);
@@ -129,22 +130,22 @@ void insertFix(tree_element *x) {                      //Балансировка вставки эл
     root->color = BLACK;
 }
 
-tree_element *insert_tree_element(value data) {       //Вставка элемента
+tree_element *insert_tree_element(value data) {       //Insert an item
     tree_element *current, *parent, *x;
     current = root;
     parent = 0;
     while (current != NIL) {
         if (compEQ(data, current->data)) return (current);
         parent = current;
-        current = compLT(data, current->data) ?       // ? Оператор ветвления
+        current = compLT(data, current->data) ?       // ? Branch operator
             current->left : current->right;
     }
-    x->data = data;                                    //Изменение элемента
+    x->data = data;                                    //Changing an item
     x->parent = parent;
     x->left = NIL;
     x->right = NIL;
     x->color = RED;
-    if(parent) {                                       //Сама вставка
+    if(parent) {                                       //Insert itself
         if(compLT(data, parent->data))
             parent->left = x;
         else
@@ -157,7 +158,7 @@ tree_element *insert_tree_element(value data) {       //Вставка элемента
     return(x);
 }
 
-void deleteFix(tree_element *x) {                     //Балансировка удаления элемента
+void deleteFix(tree_element *x) {                     //The balancing of deletion an item
     while (x != root && x->color == BLACK) {
         if (x == x->parent->left) {
             tree_element *w = x->parent->right;
@@ -212,7 +213,7 @@ void deleteFix(tree_element *x) {                     //Балансировка удаления эл
     x->color = BLACK;
 }
 
-void deleteElement(tree_element *z) {                 //Удаление элемента
+void deleteElement(tree_element *z) {                 //Deletion an item
     tree_element *x, *y;
 
     if (!z || z == NIL) return;
@@ -245,10 +246,10 @@ void deleteElement(tree_element *z) {                 //Удаление элемента
     if (y->color == BLACK)
         deleteFix(x);
 
-    delete(y);                                   //Освобождение памяти
+    delete(y);                                   //Free of an item
 }
 
-tree_element *find_element(value data) {              //Поиск элемента
+tree_element *find_element(value data) {              //Search of an item
 
     tree_element *current = root;
     while(current != NIL)
@@ -260,7 +261,7 @@ tree_element *find_element(value data) {              //Поиск элемента
     return(0);
 }
 
-void delete_tree (tree_element* root) {
+void delete_tree (tree_element* root) {         //Delete all tree
     if (root -> right != NIL)
     {
         delete_tree(root -> right);
