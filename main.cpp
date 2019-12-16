@@ -12,12 +12,12 @@
 //Williams, 2005. – 1296 p. (P. 336-356)
 
 
-
+#include <cstdlib>
 #include <iostream>
 
 using namespace std;
                                           //typedef - 'alias', used to simplify code
-enum typecolor { BLACK, RED };   //Enter the enumeration type to indicate the color of the element
+enum typecolor { BLACK, RED };            //Enter the enumeration type to indicate the color of the element
 
 typedef int value;
 #define compLT(a,b) (a < b)              //Let's introduce comparison operations
@@ -131,7 +131,7 @@ void insertFix(tree_element *x) {                      //Balancing of the insert
 }
 
 tree_element *insert_tree_element(value data) {       //Insert an item
-    tree_element *current, *parent, *x;
+    tree_element *current, *parent, *x ;
     current = root;
     parent = 0;
     while (current != NIL) {
@@ -139,6 +139,10 @@ tree_element *insert_tree_element(value data) {       //Insert an item
         parent = current;
         current = compLT(data, current->data) ?       // ? Branch operator
             current->left : current->right;
+    }
+    if ((x = (tree_element*)malloc (sizeof(*x))) == 0) {
+        printf ("insufficient memory");
+        exit(1);
     }
     x->data = data;                                    //Changing an item
     x->parent = parent;
@@ -278,5 +282,8 @@ void delete_tree (tree_element* root) {         //Delete all tree
 
 int main()
 {
+    insert_tree_element(42);
+    cout << find_element(42)->color << " " << find_element(42)->data << endl;
+    delete_tree(root);
     return 0;
 }
