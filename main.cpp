@@ -16,25 +16,6 @@
 #include <iostream>
 
 using namespace std;
-class tree
-{
-
-                                     //typedef - 'alias', used to simplify code;
-public:
-       void rotateLeft(tree_element *x);
-       void rotateRight(tree_element *x);
-       void insertFix(tree_element *x);
-       tree_element* create_tree_element(value data2);
-       tree_element *insert_tree_element(value data);
-       void deleteFix(tree_element *x);
-       void deleteElement(tree_element *z);
-       tree_element *find_element(value data);
-       void delete_tree (tree_element* root);
-private:
-       tree_element leaf = {0, NIL, NIL, 0, BLACK};   //Tree leaves
-       tree_element *root = NIL;
-};
-
 
 enum typecolor { BLACK, RED };            //Enter the enumeration type to indicate the color of the element
 
@@ -53,6 +34,32 @@ typedef struct tree_element {            //All the information about the item
 #define NIL & leaf
 tree_element leaf = {0, NIL, NIL, 0, BLACK};   //Tree leaves
 tree_element *root = NIL;                      //Root element
+
+class tree
+{
+
+                                     //typedef - 'alias', used to simplify code;
+public:
+       void rotateLeft(tree_element *x);
+       void rotateRight(tree_element *x);
+       void insertFix(tree_element *x);
+       tree_element* create_tree_element(value data2);
+       tree_element *insert_tree_element(value data);
+       void deleteFix(tree_element *x);
+       void deleteElement(tree_element *z);
+       tree_element *find_element(value data);
+       void delete_tree (tree_element* root);
+private:
+       typedef struct tree_element {            //All the information about the item
+         value data;
+         struct tree_element* left;
+         struct tree_element* right;
+         struct tree_element* parent;
+         typecolor color;
+         } tree_element;
+       tree_element leaf = {0, NIL, NIL, 0, BLACK};   //Tree leaves
+       tree_element *root = NIL;
+};
 
 
 tree_element* create_tree_element(value data2) {       //Create element
