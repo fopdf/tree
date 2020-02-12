@@ -16,7 +16,26 @@
 #include <iostream>
 
 using namespace std;
-                                          //typedef - 'alias', used to simplify code
+class tree
+{
+
+                                     //typedef - 'alias', used to simplify code;
+public:
+       void rotateLeft(tree_element *x);
+       void rotateRight(tree_element *x);
+       void insertFix(tree_element *x);
+       tree_element* create_tree_element(value data2);
+       tree_element *insert_tree_element(value data);
+       void deleteFix(tree_element *x);
+       void deleteElement(tree_element *z);
+       tree_element *find_element(value data);
+       void delete_tree (tree_element* root);
+private:
+       tree_element leaf = {0, NIL, NIL, 0, BLACK};   //Tree leaves
+       tree_element *root = NIL;
+};
+
+
 enum typecolor { BLACK, RED };            //Enter the enumeration type to indicate the color of the element
 
 typedef int value;
@@ -283,6 +302,7 @@ void delete_tree (tree_element* root) {         //Delete all tree
 int main()
 {
     insert_tree_element(42);
+    create_tree_element(42);
     cout << find_element(42)->color << " " << find_element(42)->data << endl;
     delete_tree(root);
     return 0;
